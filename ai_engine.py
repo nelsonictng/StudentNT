@@ -6,44 +6,35 @@ client = OpenAI(
     api_key=settings.OPENAI_API_KEY,
 )
 
-
-def generate_learning(topic,country):
+def generate_learning_stream(country, topic):
     prompt = f"""
     Teach {country} students about {topic}.
 
-    Include:
-    - Lesson
-    - Examples using local foods
-    - 3 quiz questions
+    Structure:
+    1. A comprehensive lesson using local food examples from {country}.
+    2. A section labeled 'QUIZ_SECTION'.
+    3. Exactly 3 multiple-choice questions formatted EXACTLY like this:
+    
+    Q: [Question text]
+    A) [Option]
+    B) [Option]
+    C) [Option]
+    D) [Option]
+    Answer: [Letter]
     """
 
-    response = client.chat.completions.create(
+    stream = client.chat.completions.create(
         model=settings.OPENAI_MODEL,
-        max_tokens=4096,
         messages=[
-            {"role": "system", "content": "You are an Experience nutrition teacher."},
+            {"role": "system", "content": "You are a teacher who uses local culture to explain nutrition."},
             {"role": "user", "content": prompt}
         ],
+        stream=True
     )
-
-    return response.choices[0].message.content
-
-
-"""from openai import OpenAI
-import os
-
-client = OpenAI(
-  base_url="https://api.featherless.ai/v1",
-  api_key="rc_9ae58b1be7ff69aa15cc7e2a320424c766b82aeffb9e5967fcf6d3d61add0ded",
-)
-
-response = client.chat.completions.create(
-  model='Qwen/Qwen2.5-7B-Instruct',
-  max_tokens=4096,
-  messages=[
-    {"role": "system", "content": "You are a helpful assistant."},
-    {"role": "user", "content": "Hello!"}
-  ],
-)
-print(response.model_dump()['choices'][0]['message']['content'])
-"""
+    
+    for chunk in stream:
+        # Check if choices exists and has at least one item
+        if hasattr(chunk, 'choices') and len(chunk.choices) > 0:
+            content = chunk.choices[0].delta.content
+            if content:
+                yield content
