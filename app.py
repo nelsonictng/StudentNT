@@ -53,35 +53,29 @@ def apply_login_style():
     """, unsafe_allow_html=True)
 
 # --- LOGIN GATE ---
+# app.py login section
+init_db()
+st.set_page_config(page_title="Nutrition Learning Platform", page_icon="🥗", layout="wide")
+
+# 1. CRITICAL: Catch the Auth0 response before checking the session
+auth_lib.handle_callback()
+
+# 2. Check for the user
 if "user" not in st.session_state:
     apply_login_style()
     
-    # Using a native Streamlit Container for the "Card"
     with st.container(border=True):
         st.title("🥗 NutritionAI")
         st.subheader("Regional Learning Portal")
+        st.write("Welcome back! Please sign in to access your dashboard.")
         
-        # Using columns to center the descriptive text and image
-        col1, col2 = st.columns([1, 2])
-        with col1:
-            # Native icon or image
-            st.write("## 🌍") 
-        with col2:
-            st.write("**Empowering West African Examination Centers** with localized nutritional data.")
+        auth_lib.login()
         
         st.divider()
-        
-        # Using a status object to guide the user
-        with st.status("Authentication Required", expanded=True) as status:
-            st.write("Please use your authorized credentials to access the dashboard.")
-            
-            # The Login Button from auth_lib
-            auth_lib.login()
-            
-            status.update(label="Awaiting Login...", state="running", expanded=False)
-
+        st.caption("Secure authentication powered by Auth0")
     st.stop()
 
+# --- POST-LOGIN VALIDATION ---
 user = st.session_state["user"]
 services.register_user_if_not_exists(user)
 
