@@ -1,5 +1,7 @@
 streamlit
-python-dotenv
 openai
+python-dotenv
 authlib
 requests
+fpdf
+pyttsx3
