@@ -1,6 +1,6 @@
-OPENAI_API_KEY=your_key_here
-OPENAI_BASE_URL=https://api.featherless.ai/v1
-OPENAI_MODEL=Qwen/Qwen2.5-7B-Instruct
+FEATHERLESS_API_KEY=your_key_here
+FEATHERLESS_BASE_URL=https://api.featherless.ai/v1
+FEATHERLESS_MODEL=Qwen/Qwen2.5-7B-Instruct
 
 AUTH0_DOMAIN=your-domain.auth0.com
 AUTH0_CLIENT_ID=your_client_id
