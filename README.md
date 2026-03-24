@@ -22,7 +22,7 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/yourusername/NutritionAI.git](https://github.com/yourusername/NutritionAI.git)
+   git clone [https://github.com/edunelsonit/NutritionAI.git](https://github.com/edunelsonit/NutritionAI.git)
    cd NutritionAI
 2. **Install Dependencies:**
     ```bash
